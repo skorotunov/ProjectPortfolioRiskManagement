@@ -1,12 +1,17 @@
-﻿
+﻿@model Dictionary<string, object>
 @{
     ViewBag.Title = "Register";
 }
 
-<div class="well">
-    <h3>
-        <strong>Register</strong>
-        <span class="pull-right label label-primary">re</span>
-    </h3>
-    <span class="lead"> 1</span>
+<div class="panel panel-primary">
+    <div class="panel-heading">User Details</div>
+    <table class="table table-striped">
+        @foreach (string key in Model.Keys)
+        {
+            <tr>
+                <th>@key</th>
+                <td>@Model[key]</td>
+            </tr>
+        }
+    </table>
 </div>
