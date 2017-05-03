@@ -10,8 +10,10 @@ namespace ProjectPortfolioRiskManager
     {
         public void Configuration(IAppBuilder app)
         {
-            app.CreatePerOwinContext<EFDbContext>(EFDbContext.Create);
+            app.CreatePerOwinContext(EFDbContext.Create);
             app.CreatePerOwinContext<EFUserManager>(EFUserManager.Create);
+            app.CreatePerOwinContext<EFRoleManager>(EFRoleManager.Create);
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

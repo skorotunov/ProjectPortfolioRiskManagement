@@ -3,6 +3,5 @@
 namespace ProjectPortfolioRiskManager.Domain.Concrete
 {
     public class User : IdentityUser
-    {
-    }
+    { }
 }

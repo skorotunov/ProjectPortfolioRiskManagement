@@ -9,9 +9,8 @@ namespace ProjectPortfolioRiskManager.Domain.Infrastructure
     public class EFUserManager : UserManager<User>
     {
         public EFUserManager(IUserStore<User> store)
-            : base(store)
-        {
-        }
+            : base(store) { }
+
         public static EFUserManager Create(IdentityFactoryOptions<EFUserManager> options, IOwinContext context)
         {
             var db = context.Get<EFDbContext>();

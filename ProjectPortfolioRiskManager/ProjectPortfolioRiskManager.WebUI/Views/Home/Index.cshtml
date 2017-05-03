@@ -1,8 +1,4 @@
-﻿@model Dictionary<string, object>
-@{
-    ViewBag.Title = "Register";
-}
-
+﻿@{ ViewBag.Title = "Index"; }
 <div class="panel panel-primary">
     <div class="panel-heading">User Details</div>
     <table class="table table-striped">
@@ -15,3 +11,4 @@
         }
     </table>
 </div>
+@Html.ActionLink("Sign Out", "Logout", "Account", null, new { @class = "btn btn-primary" })
