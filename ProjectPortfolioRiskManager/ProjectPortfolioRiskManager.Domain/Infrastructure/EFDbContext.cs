@@ -11,6 +11,10 @@ namespace ProjectPortfolioRiskManager.Domain.Infrastructure
             : base("EFDbContext")
         { }
         
+        static EFDbContext()
+        {
+            Database.SetInitializer<EFDbContext>(new IdentityDbInit());
+        }
 
         public static EFDbContext Create()
         {

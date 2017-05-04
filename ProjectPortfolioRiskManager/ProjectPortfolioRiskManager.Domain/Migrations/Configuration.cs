@@ -21,7 +21,7 @@ namespace ProjectPortfolioRiskManager.Domain.Migrations
             var expertRoleName = "Expert";
             var analyticRoleName = "Analytic";
             var adminName = "admin";
-            var password = "adm1n";
+            var password = "qwerty123";
             var email = "serij007@gmail.com";
             if (!roleMgr.RoleExists(adminRoleName))
             {
