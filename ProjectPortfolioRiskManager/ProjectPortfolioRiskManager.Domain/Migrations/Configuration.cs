@@ -6,11 +6,11 @@ using System.Data.Entity.Migrations;
 
 namespace ProjectPortfolioRiskManager.Domain.Migrations
 {
-    internal sealed class Configuration : DbMigrationsConfiguration<EFDbContext>
+    public sealed class Configuration : DbMigrationsConfiguration<EFDbContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(EFDbContext context)
