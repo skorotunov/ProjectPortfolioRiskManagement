@@ -1,5 +1,6 @@
 ﻿@model CreateModel
 @{ ViewBag.Title = "Create User";}
+
 <h2>Create User</h2>
 @Html.ValidationSummary(false)
 @using (Html.BeginForm())
@@ -17,5 +18,5 @@
         @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
-    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Cancel", "Users", null, new { @class = "btn btn-default" })
 }

@@ -1,5 +1,6 @@
 ﻿@model RoleEditModel
 @{ ViewBag.Title = "Edit Role";}
+
 @Html.ValidationSummary()
 @using (Html.BeginForm())
 {
@@ -49,5 +50,5 @@
         </table>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
-    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Cancel", "Roles", null, new { @class = "btn btn-default" })
 }

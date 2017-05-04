@@ -15,28 +15,22 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
     [Authorize(Roles = "Administrator, Analytic")]
     public class AdminController : Controller
     {
-        private EFUserManager UserManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<EFUserManager>();
-            }
-        }
-
         [HttpGet]
-        public ActionResult Index()
+        [AllowAnonymous]
+        public ActionResult Users()
         {
             return View(UserManager.Users);
         }
 
         [HttpGet]
-        public ActionResult Create()
+        [AllowAnonymous]
+        public ActionResult CreateUser()
         {
             return View();
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> EditUser(string id)
         {
             User user = await UserManager.FindByIdAsync(id);
             if (user != null)
@@ -45,12 +39,12 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
             }
             else
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Users");
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateModel model)
+        public async Task<ActionResult> CreateUser(CreateModel model)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +52,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 IdentityResult result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Users");
                 }
                 else
                 {
@@ -69,7 +63,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> DeleteUser(string id)
         {
             User user = await UserManager.FindByIdAsync(id);
             if (user != null)
@@ -77,7 +71,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 IdentityResult result = await UserManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Users");
                 }
                 else
                 {
@@ -91,14 +85,13 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(string id, string email, string password)
+        public async Task<ActionResult> EditUser(string id, string email, string password)
         {
             User user = await UserManager.FindByIdAsync(id);
             if (user != null)
             {
                 user.Email = email;
-                IdentityResult validEmail
-                = await UserManager.UserValidator.ValidateAsync(user);
+                IdentityResult validEmail = await UserManager.UserValidator.ValidateAsync(user);
                 if (!validEmail.Succeeded)
                 {
                     AddErrorsFromResult(validEmail);
@@ -106,25 +99,22 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 IdentityResult validPass = null;
                 if (password != string.Empty)
                 {
-                    validPass
-                    = await UserManager.PasswordValidator.ValidateAsync(password);
+                    validPass = await UserManager.PasswordValidator.ValidateAsync(password);
                     if (validPass.Succeeded)
                     {
-                        user.PasswordHash =
-                        UserManager.PasswordHasher.HashPassword(password);
+                        user.PasswordHash = UserManager.PasswordHasher.HashPassword(password);
                     }
                     else
                     {
                         AddErrorsFromResult(validPass);
                     }
                 }
-                if ((validEmail.Succeeded && validPass == null) || (validEmail.Succeeded
-                && password != string.Empty && validPass.Succeeded))
+                if ((validEmail.Succeeded && validPass == null) || (validEmail.Succeeded && password != string.Empty && validPass.Succeeded))
                 {
                     IdentityResult result = await UserManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Users");
                     }
                     else
                     {
@@ -137,14 +127,6 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 ModelState.AddModelError("", "User Not Found");
             }
             return View(user);
-        }
-
-        private void AddErrorsFromResult(IdentityResult result)
-        {
-            foreach (string error in result.Errors)
-            {
-                ModelState.AddModelError("", error);
-            }
         }
 
         public ActionResult Roles()
@@ -162,8 +144,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityResult result
-                = await RoleManager.CreateAsync(new Role(name));
+                IdentityResult result = await RoleManager.CreateAsync(new Role(name));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Roles");
@@ -198,20 +179,12 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
             }
         }
 
-        private EFRoleManager RoleManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<EFRoleManager>();
-            }
-        }
-
+        [HttpGet]
         public async Task<ActionResult> EditRole(string id)
         {
             Role role = await RoleManager.FindByIdAsync(id);
             string[] memberIDs = role.Users.Select(x => x.UserId).ToArray();
-            IEnumerable<User> members
-            = UserManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
+            IEnumerable<User> members = UserManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
             IEnumerable<User> nonMembers = UserManager.Users.Except(members);
             return View(new RoleEditModel
             {
@@ -220,6 +193,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 NonMembers = nonMembers
             });
         }
+
         [HttpPost]
         public async Task<ActionResult> EditRole(RoleModificationModel model)
         {
@@ -236,16 +210,39 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 }
                 foreach (string userId in model.IdsToDelete ?? new string[] { })
                 {
-                    result = await UserManager.RemoveFromRoleAsync(userId,
-                    model.RoleName);
+                    result = await UserManager.RemoveFromRoleAsync(userId, model.RoleName);
                     if (!result.Succeeded)
                     {
                         return View("Error", result.Errors);
                     }
                 }
-                return RedirectToAction("Index");
+                return RedirectToAction("Roles");
             }
             return View("Error", new string[] { "Role Not Found" });
+        }
+
+        private EFUserManager UserManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<EFUserManager>();
+            }
+        }
+
+        private EFRoleManager RoleManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().GetUserManager<EFRoleManager>();
+            }
+        }
+
+        private void AddErrorsFromResult(IdentityResult result)
+        {
+            foreach (string error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
         }
     }
 }

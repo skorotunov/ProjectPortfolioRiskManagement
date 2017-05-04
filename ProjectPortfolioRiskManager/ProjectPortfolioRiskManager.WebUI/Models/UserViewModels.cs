@@ -1,9 +1,6 @@
 ﻿using ProjectPortfolioRiskManager.Domain.Concrete;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ProjectPortfolioRiskManager.WebUI.Models
 {
@@ -31,6 +28,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
         public IEnumerable<User> Members { get; set; }
         public IEnumerable<User> NonMembers { get; set; }
     }
+
     public class RoleModificationModel
     {
         [Required]

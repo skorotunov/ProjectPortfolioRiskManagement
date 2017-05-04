@@ -1,6 +1,7 @@
 ﻿@using ProjectPortfolioRiskManager.Domain.Concrete
 @model IEnumerable<Role>
 @{ ViewBag.Title = "Roles"; }
+
 <div class="panel panel-primary">
     <div class="panel-heading">Roles</div>
     <table class="table table-striped">
@@ -20,21 +21,18 @@
                         @if (role.Users == null || role.Users.Count == 0)
                         {
                             @: No Users in Role
-}
+                        }
                         else
                         {
                             <p>
-                                @string.Join(", ", role.Users.Select(x =>
-Html.GetUserName(x.UserId)))
-                        </p>
+                                @string.Join(", ", role.Users.Select(x => Html.GetUserName(x.UserId)))
+                            </p>
                         }
                     </td>
                     <td>
-                        @using (Html.BeginForm("Delete", "RoleAdmin",
-new { id = role.Id }))
+                        @using (Html.BeginForm("DeleteRole", "Admin", new { id = role.Id }))
                         {
-                            @Html.ActionLink("Edit", "Edit", new { id = role.Id },
-new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("Edit", "EditRole", new { id = role.Id }, new { @class = "btn btn-primary btn-xs" })
                             <button class="btn btn-danger btn-xs"
                                     type="submit">
                                 Delete
@@ -46,4 +44,4 @@ new { @class = "btn btn-primary btn-xs" })
         }
     </table>
 </div>
-@Html.ActionLink("Create", "Create", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("Create", "CreateRole", null, new { @class = "btn btn-primary" })

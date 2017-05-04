@@ -4,7 +4,6 @@ using Microsoft.Owin.Security;
 using ProjectPortfolioRiskManager.Domain.Concrete;
 using ProjectPortfolioRiskManager.Domain.Infrastructure;
 using ProjectPortfolioRiskManager.WebUI.Models;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -12,7 +11,6 @@ using System.Web.Mvc;
 
 namespace ProjectPortfolioRiskManager.WebUI.Controllers
 {
-    [Authorize]
     public class AccountController : Controller
     {
         private IAuthenticationManager AuthManager
@@ -32,7 +30,6 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             if (HttpContext.User.Identity.IsAuthenticated)
@@ -44,7 +41,6 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel details, string returnUrl)
         {
@@ -60,9 +56,9 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                     ClaimsIdentity ident = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthManager.SignOut();
                     AuthManager.SignIn(new AuthenticationProperties
-                        {
-                            IsPersistent = false
-                        }, ident);
+                    {
+                        IsPersistent = false
+                    }, ident);
                     return Redirect(returnUrl);
                 }
             }
