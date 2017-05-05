@@ -16,3 +16,10 @@ textarea {
     max-width: 280px;
 }
 
+.container {
+    padding-top: 10px;
+}
+
+.validation-summary-errors {
+    color: #f00;
+}

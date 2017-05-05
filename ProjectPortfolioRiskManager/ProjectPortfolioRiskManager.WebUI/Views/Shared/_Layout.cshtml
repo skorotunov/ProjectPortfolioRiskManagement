@@ -1,36 +1,94 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
-    <title>@ViewBag.Title</title>
-    <style>
-        .container {
-            padding-top: 10px;
-        }
-
-        .validation-summary-errors {
-            color: #f00;
-        }
-    </style>
-    @*<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />    
-    <script src="~/Scripts/modernizr-2.6.2.js"></script>*@
+    <link href="~/Content/clean-blog.min.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    @*<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />*@
+    <title>@ViewBag.Title - Risk Manager</title>
 </head>
 <body>
-    <div class="navbar navbar-inverse" role="navigation">
-        <a class="navbar-brand" href="#">PROJECT PORTFOLIO RISK MANAGER</a>
-    </div>
-    <div class="row panel">
-        <div id="categories" class="col-xs-3">
-            Put something useful here later
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    Menu <i class="fa fa-bars"></i>
+                </button>
+                @Html.ActionLink("Risk Manager", "Index", "Home",null, new { @class = "navbar-brand" })
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        @Html.ActionLink("Home", "Index", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("About", "About", "Home")
+                    </li>
+                    <li>
+                        @Html.ActionLink("Contact", "Contact", "Home")
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="col-xs-8">
-            @RenderBody()
+    </nav>
+    <header class="intro-header" style="background-image: url('Content/Images/Header.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <h1>Risk Manager</h1>
+                        <hr class="small">
+                        <span class="subheading">Web site for the project portfolio risk magagement</span>
+                    </div>
+                </div>
+            </div>
         </div>
+    </header>
+    <div class="container">
+        @RenderBody()
     </div>
-    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>*@
+    <hr>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-vk fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="copyright text-muted">Copyright &copy; Project Portfolio Risk Manager @DateTime.Now.Year</p>
+                </div>
+            </div>
+        </div>
+    </footer>    
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*<script src="~/Scripts/jqBootstrapValidation.js"></script>*@
+    <script src="~/Scripts/clean-blog.min.js"></script>
 </body>
 </html>

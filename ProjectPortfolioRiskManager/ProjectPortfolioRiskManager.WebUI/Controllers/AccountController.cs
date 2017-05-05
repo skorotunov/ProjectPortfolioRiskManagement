@@ -42,7 +42,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginModel details, string returnUrl)
+        public async Task<ActionResult> Login(LoginModel details)
         {
             if (ModelState.IsValid)
             {
@@ -59,10 +59,10 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                     {
                         IsPersistent = false
                     }, ident);
-                    return Redirect(returnUrl);
+                    return Redirect("");
                 }
             }
-            ViewBag.returnUrl = returnUrl;
+            ViewBag.returnUrl = "";
             return View(details);
         }
 

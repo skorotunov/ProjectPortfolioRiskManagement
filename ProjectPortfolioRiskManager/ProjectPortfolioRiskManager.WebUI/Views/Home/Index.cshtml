@@ -1,15 +1,37 @@
-﻿@{ ViewBag.Title = "Index"; }
+﻿@model LoginModel
+@{ ViewBag.Title = "Home"; }
 
-<div class="panel panel-primary">
-    <div class="panel-heading">User Details</div>
-    <table class="table table-striped">
-        @foreach (string key in Model.Keys)
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <p>Welcome to the Project Portfolio Risk Manager. This website is developed in Zaporizhzhya National Technical University in cooperation with Kaunas University of Technology.</p>
+        <p>This website purpose is to establish the relationship between dynamic capabilities and project portfolio risk management. This will be carried out with the help of theoretical analysis of the dynamic capabilities and project portfolio risk management constructs.</p>
+        <h3>To continue please log in!</h3>
+        @using (Html.BeginForm())
         {
-            <tr>
-                <th>@key</th>
-                <td>@Model[key]</td>
-            </tr>
+            @Html.ValidationSummary();
+            @Html.AntiForgeryToken();
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Name</label>
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Name" })
+                    @Html.ValidationMessageFor(x => x.Name)
+                </div>
+            </div>
+            <div class="row control-group">
+                <div class="form-group col-xs-12 floating-label-form-group controls">
+                    <label>Password</label>
+                    @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password" })
+                    <p class="help-block text-danger">@Html.ValidationMessageFor(x => x.Password)</p>
+                </div>
+            </div>
+            <br>
+            <div id="success"></div>
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <button type="submit" class="btn btn-default">Log In</button> or @Html.ActionLink("Sign up now", "Register", "Account")
+                    <p> </p>
+                </div>
+            </div>
         }
-    </table>
+    </div>
 </div>
-@Html.ActionLink("Sign Out", "Logout", "Account", null, new { @class = "btn btn-primary" })
