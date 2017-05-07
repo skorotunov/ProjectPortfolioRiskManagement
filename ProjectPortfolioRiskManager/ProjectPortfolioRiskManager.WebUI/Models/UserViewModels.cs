@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectPortfolioRiskManager.WebUI.Models
 {
-    public class CreateModel
+    public class RegisterModel
     {
         [Required]
         public string Name { get; set; }
@@ -20,6 +20,14 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
         public string Name { get; set; }
         [Required]
         public string Password { get; set; }
+    }
+
+    public class EditProfileModel
+    {
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Email { get; set; }
     }
 
     public class RoleEditModel

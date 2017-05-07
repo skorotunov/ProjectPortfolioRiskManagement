@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace ProjectPortfolioRiskManager.WebUI.Controllers
 {
+    [Authorize(Roles = "Expert, Administrator")]
     public class ExpertController : Controller
     {
         // GET: Expert

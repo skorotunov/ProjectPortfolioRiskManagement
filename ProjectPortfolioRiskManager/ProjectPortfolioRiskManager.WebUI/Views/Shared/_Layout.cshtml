@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,7 +9,7 @@
     <link href="~/Content/clean-blog.min.css" rel="stylesheet" />
     <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-3.1.1.min.js"></script>
-    @*<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />*@
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <title>@ViewBag.Title - Risk Manager</title>
 </head>
 <body>
@@ -22,20 +24,28 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        @Html.ActionLink("Home", "Index", "Home")
-                    </li>
-                    <li>
-                        @Html.ActionLink("About", "About", "Home")
-                    </li>
-                    <li>
-                        @Html.ActionLink("Contact", "Contact", "Home")
-                    </li>
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Expert") || User.IsInRole("Administrator")))
+                    {
+                        <li>@Html.ActionLink("Expert area", "Index", "Expert")</li>
+                    }
+                    @if (User.Identity.IsAuthenticated && (User.IsInRole("Analytic") || User.IsInRole("Administrator")))
+                    {
+                        <li>@Html.ActionLink("Analytic area", "Index", "Analytic")</li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
+                    {
+                        <li>@Html.ActionLink("Administrator area", "Index", "Admin")</li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Hello, " + User.Identity.GetUserName() + "!", "Index", "Account")</li>
+                        <li>@Html.ActionLink("Log out", "Logout", "Account")</li>
+                    }
                 </ul>
             </div>
         </div>
     </nav>
-    <header class="intro-header" style="background-image: url('Content/Images/Header.jpg')">
+    <header class="intro-header" style="background-image: url('@Url.Content("~/Content/Images/Header.jpg")')">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -56,39 +66,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <ul class="list-inline text-center">
-                        <li>
-                            <a href="#">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa-vk fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
                     <p class="copyright text-muted">Copyright &copy; Project Portfolio Risk Manager @DateTime.Now.Year</p>
                 </div>
             </div>
         </div>
     </footer>    
     <script src="~/Scripts/bootstrap.min.js"></script>
-    @*<script src="~/Scripts/jqBootstrapValidation.js"></script>*@
     <script src="~/Scripts/clean-blog.min.js"></script>
 </body>
 </html>

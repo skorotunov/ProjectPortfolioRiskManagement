@@ -44,7 +44,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 User user = await UserManager.FindAsync(model.Name, model.Password);
                 if (user == null)
                 {
-                    return View("Error", new string[] { "Invalid name or password" });
+                    ModelState.AddModelError("", "Invalid name or password");
                 }
                 else
                 {
@@ -62,6 +62,35 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                     else
                     {
                         return RedirectToAction("Index", "Expert");
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new User { UserName = model.Name, Email = model.Email };
+                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    UserManager.AddToRole(user.Id, "Expert");
+                    return RedirectToAction("Index", "Expert");
+                }
+                else
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
                     }
                 }
             }

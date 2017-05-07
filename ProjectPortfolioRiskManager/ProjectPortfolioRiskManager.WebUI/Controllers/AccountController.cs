@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace ProjectPortfolioRiskManager.WebUI.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private IAuthenticationManager AuthManager
@@ -30,44 +31,44 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Login(string returnUrl)
+        public async Task<ViewResult> Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
+            var user = await UserManager.FindByNameAsync(User.Identity.Name);
+            var model = new EditProfileModel()
             {
-                return View("Error", new string[] { "Access Denied" });
-            }
-            ViewBag.returnUrl = returnUrl;
-            return View();
+                Email = user.Email,
+                Name = user.UserName
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginModel details)
+        public async Task<ActionResult> Index(EditProfileModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await UserManager.FindAsync(details.Name, details.Password);
-                if (user == null)
+                var user = await UserManager.FindByNameAsync(User.Identity.Name);
+                user.UserName = model.Name;
+                user.Email = model.Email;
+                var result = await UserManager.UpdateAsync(user);
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError("", "Invalid name or password.");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ClaimsIdentity ident = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                    AuthManager.SignOut();
-                    AuthManager.SignIn(new AuthenticationProperties
+                    foreach (string error in result.Errors)
                     {
-                        IsPersistent = false
-                    }, ident);
-                    return Redirect("");
+                        ModelState.AddModelError("", error);
+                    }
                 }
             }
-            ViewBag.returnUrl = "";
-            return View(details);
+            return View(model);
         }
 
-        [HttpGet]
-        [Authorize]
+        [HttpGet]        
         public ActionResult Logout()
         {
             AuthManager.SignOut();

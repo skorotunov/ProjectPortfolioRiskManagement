@@ -44,7 +44,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateUser(CreateModel model)
+        public async Task<ActionResult> CreateUser(RegisterModel model)
         {
             if (ModelState.IsValid)
             {

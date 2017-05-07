@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace ProjectPortfolioRiskManager.WebUI.Controllers
 {
+    [Authorize(Roles = "Analytic, Administrator")]
     public class AnaliticController : Controller
     {
         // GET: Analitic
