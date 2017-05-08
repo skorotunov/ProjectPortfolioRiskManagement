@@ -6,7 +6,6 @@ using ProjectPortfolioRiskManager.WebUI.BLL;
 using ProjectPortfolioRiskManager.WebUI.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -149,33 +148,16 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Roles()
         {
-            return View(roleManager.Roles);
-        }
-
-        public ActionResult CreateRole()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> CreateRole([Required]string name)
-        {
-            if (ModelState.IsValid)
+            var model = new List<RoleViewModel>();
+            foreach (Role role in roleManager.Roles)
             {
-                IdentityResult result = await roleManager.CreateAsync(new Role(name));
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Roles");
-                }
-                else
-                {
-                    addErrorsFromResult(result);
-                }
+                model.Add(new RoleViewModel(role, userManager));
             }
-            return View(name);
+            return View(model);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult> DeleteRole(string id)
         {
             Role role = await roleManager.FindByIdAsync(id);
@@ -198,29 +180,50 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> EditRole(string id)
+        [Authorize(Roles = "Administrator")]
+        public ActionResult CreateRole()
         {
-            Role role = await roleManager.FindByIdAsync(id);
-            string[] memberIDs = role.Users.Select(x => x.UserId).ToArray();
-            IEnumerable<User> members = userManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
-            IEnumerable<User> nonMembers = userManager.Users.Except(members);
-            return View(new RoleEditModel
-            {
-                Role = role,
-                Members = members,
-                NonMembers = nonMembers
-            });
+            return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditRole(RoleModificationModel model)
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> CreateRole([Required]string name)
         {
-            IdentityResult result;
             if (ModelState.IsValid)
             {
+                IdentityResult result = await roleManager.CreateAsync(new Role(name));
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Roles");
+                }
+                else
+                {
+                    addErrorsFromResult(result);
+                }
+            }
+            return View(name);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> EditRole(string id)
+        {
+            Role role = await roleManager.FindByIdAsync(id);
+            var model = new EditRoleViewModel(role, userManager, roleManager);
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public async Task<ActionResult> EditRole(RoleModificationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityResult result;
                 foreach (string userId in model.IdsToAdd ?? new string[] { })
                 {
-                    result = await userManager.AddToRoleAsync(userId, model.RoleName);
+                    result = await userManager.AddToRoleAsync(userId, model.Name);
                     if (!result.Succeeded)
                     {
                         return View("Error", result.Errors);
@@ -228,7 +231,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 }
                 foreach (string userId in model.IdsToDelete ?? new string[] { })
                 {
-                    result = await userManager.RemoveFromRoleAsync(userId, model.RoleName);
+                    result = await userManager.RemoveFromRoleAsync(userId, model.Name);
                     if (!result.Succeeded)
                     {
                         return View("Error", result.Errors);

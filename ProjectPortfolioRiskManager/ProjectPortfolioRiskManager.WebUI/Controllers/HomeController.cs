@@ -8,27 +8,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using static ProjectPortfolioRiskManager.WebUI.Utils.Enums;
 
 namespace ProjectPortfolioRiskManager.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IAuthenticationManager AuthManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
-        private EFUserManager UserManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().GetUserManager<EFUserManager>();
-            }
-        }
-
         [HttpGet]
         public ActionResult Index()
         {
@@ -37,31 +22,31 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(LoginModel model)
+        public async Task<ActionResult> Index(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await UserManager.FindAsync(model.Name, model.Password);
+                User user = await userManager.FindAsync(model.Name, model.Password);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Invalid name or password");
                 }
                 else
                 {
-                    ClaimsIdentity ident = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-                    AuthManager.SignOut();
-                    AuthManager.SignIn(new AuthenticationProperties
+                    ClaimsIdentity ident = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+                    authManager.SignOut();
+                    authManager.SignIn(new AuthenticationProperties
                     {
                         IsPersistent = false
                     }, ident);
 
-                    if (User.IsInRole("Analytic") || User.IsInRole("Administrator"))
+                    if (User.IsInRole(eRoles.Expert.ToString()))
                     {
-                        return RedirectToAction("Index", "Analitic");
+                        return RedirectToAction("Index", "Expert");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Expert");
+                        return RedirectToAction("Index", "Analytic");
                     }
                 }
             }
@@ -75,26 +60,45 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Register(RegisterModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = new User { UserName = model.Name, Email = model.Email };
-                IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+                IdentityResult result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    UserManager.AddToRole(user.Id, "Expert");
+                    IdentityResult roleSettingResult = await userManager.AddToRoleAsync(user.Id, eRoles.Expert.ToString());
+                    if (!roleSettingResult.Succeeded)
+                    {
+                        addErrorsFromResult(roleSettingResult);
+                    }
                     return RedirectToAction("Index", "Expert");
                 }
                 else
                 {
-                    foreach (string error in result.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
+                    addErrorsFromResult(result);
                 }
             }
             return View(model);
+        }
+
+        private IAuthenticationManager authManager
+        {
+            get { return HttpContext.GetOwinContext().Authentication; }
+        }
+
+        private EFUserManager userManager
+        {
+            get { return HttpContext.GetOwinContext().GetUserManager<EFUserManager>(); }
+        }
+
+        private void addErrorsFromResult(IdentityResult result)
+        {
+            foreach (string error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
+            }
         }
     }
 }

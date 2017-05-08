@@ -1,0 +1,70 @@
+﻿@model EditRoleViewModel
+@{ ViewBag.Title = "Edit Role";}
+
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <h3>Edit Role</h3>
+        @Html.ValidationSummary(true)
+        @using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.Name)
+            <div class="row">
+                <p><i>Add to @Model.Name</i></p>
+                <table class="table">
+                    @if (Model.NonMembers == null || Model.NonMembers.Count == 0)
+                    {
+                        <tr><td colspan="2">All users are members</td></tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>User ID</td>
+                            <td>Add</td>
+                        </tr>
+                        foreach (var user in Model.NonMembers)
+                        {
+                            <tr>
+                                <td>@user.Value</td>
+                                <td>
+                                    <input type="checkbox" name="IdsToAdd" value="@user.Key">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div class="row">
+                <p><i>Remove from @Model.Name</i></p>
+                <table class="table">
+                    @if (Model.Members == null || Model.Members.Count() == 0)
+                    {
+                        <tr><td colspan="2">No users are members</td></tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>User ID</td>
+                            <td>Remove</td>
+                        </tr>
+                        foreach (var user in Model.Members)
+                        {
+                            <tr>
+                                <td>@user.Value</td>
+                                <td>
+                                    <input type="checkbox" name="IdsToDelete" value="@user.Key">
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <br>
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    @Html.ActionLink("Cancel", "Roles", null, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        }
+    </div>
+</div>

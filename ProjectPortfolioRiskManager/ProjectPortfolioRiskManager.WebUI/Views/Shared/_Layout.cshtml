@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNet.Identity
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,10 +30,6 @@
                     @if (User.Identity.IsAuthenticated && (User.IsInRole("Analytic") || User.IsInRole("Administrator")))
                     {
                         <li>@Html.ActionLink("Analytic area", "Index", "Analytic")</li>
-                    }
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Administrator"))
-                    {
-                        <li>@Html.ActionLink("Administrator area", "Index", "Admin")</li>
                     }
                     @if (User.Identity.IsAuthenticated)
                     {
