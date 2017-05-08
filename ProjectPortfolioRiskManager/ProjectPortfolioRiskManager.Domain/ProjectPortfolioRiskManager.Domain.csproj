@@ -117,7 +117,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Concrete\Answer.cs" />
+    <Compile Include="Concrete\CompanySize.cs" />
+    <Compile Include="Concrete\LikertItem.cs" />
+    <Compile Include="Concrete\Position.cs" />
+    <Compile Include="Concrete\Question.cs" />
+    <Compile Include="Concrete\Questionnaire.cs" />
     <Compile Include="Concrete\Role.cs" />
+    <Compile Include="Concrete\Section.cs" />
+    <Compile Include="Concrete\Template.cs" />
+    <Compile Include="Concrete\Templates_LikertItems.cs" />
     <Compile Include="Infrastructure\EFDbContext.cs" />
     <Compile Include="Concrete\User.cs" />
     <Compile Include="Infrastructure\EFRoleManager.cs" />
@@ -125,6 +134,14 @@
     <Compile Include="Migrations\201705031316395_Initial.cs" />
     <Compile Include="Migrations\201705031316395_Initial.Designer.cs">
       <DependentUpon>201705031316395_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705081353257_ImplementBasicArchitecture.cs" />
+    <Compile Include="Migrations\201705081353257_ImplementBasicArchitecture.Designer.cs">
+      <DependentUpon>201705081353257_ImplementBasicArchitecture.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705081355230_InsertInitialQuestionnaireData.cs" />
+    <Compile Include="Migrations\201705081355230_InsertInitialQuestionnaireData.Designer.cs">
+      <DependentUpon>201705081355230_InsertInitialQuestionnaireData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -136,6 +153,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201705031316395_Initial.resx">
       <DependentUpon>201705031316395_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705081353257_ImplementBasicArchitecture.resx">
+      <DependentUpon>201705081353257_ImplementBasicArchitecture.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705081355230_InsertInitialQuestionnaireData.resx">
+      <DependentUpon>201705081355230_InsertInitialQuestionnaireData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
