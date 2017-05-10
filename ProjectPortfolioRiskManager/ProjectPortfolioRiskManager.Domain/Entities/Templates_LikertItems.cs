@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ProjectPortfolioRiskManager.Domain.Concrete
+namespace ProjectPortfolioRiskManager.Domain.Entities
 {
     public class Templates_LikertItems
     {

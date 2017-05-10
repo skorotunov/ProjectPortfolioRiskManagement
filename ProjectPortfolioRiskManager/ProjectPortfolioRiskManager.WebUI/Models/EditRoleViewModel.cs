@@ -1,4 +1,4 @@
-﻿using ProjectPortfolioRiskManager.Domain.Concrete;
+﻿using ProjectPortfolioRiskManager.Domain.Entities;
 using ProjectPortfolioRiskManager.Domain.Infrastructure;
 using ProjectPortfolioRiskManager.WebUI.BLL;
 using System.Collections.Generic;

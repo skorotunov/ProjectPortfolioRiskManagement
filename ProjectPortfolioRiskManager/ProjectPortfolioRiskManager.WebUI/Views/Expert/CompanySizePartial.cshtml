@@ -1,0 +1,6 @@
+﻿@model IEnumerable<CompanySize>
+
+@foreach (var item in Model)
+{
+    <input type="radio" name="companySize-element" value="@item.Id" /> @item.Value<br />
+}

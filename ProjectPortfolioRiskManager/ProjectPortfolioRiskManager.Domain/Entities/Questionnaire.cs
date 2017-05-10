@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProjectPortfolioRiskManager.Domain.Concrete
+namespace ProjectPortfolioRiskManager.Domain.Entities
 {
     public class Questionnaire
     {

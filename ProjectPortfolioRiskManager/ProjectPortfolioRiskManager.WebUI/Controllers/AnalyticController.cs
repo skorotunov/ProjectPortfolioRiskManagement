@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using ProjectPortfolioRiskManager.Domain.Concrete;
+using ProjectPortfolioRiskManager.Domain.Entities;
 using ProjectPortfolioRiskManager.Domain.Infrastructure;
 using ProjectPortfolioRiskManager.WebUI.BLL;
 using ProjectPortfolioRiskManager.WebUI.Models;

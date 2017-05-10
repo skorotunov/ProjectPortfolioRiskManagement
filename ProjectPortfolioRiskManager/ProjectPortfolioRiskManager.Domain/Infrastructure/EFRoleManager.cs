@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using ProjectPortfolioRiskManager.Domain.Concrete;
+using ProjectPortfolioRiskManager.Domain.Entities;
 using System;
 
 namespace ProjectPortfolioRiskManager.Domain.Infrastructure

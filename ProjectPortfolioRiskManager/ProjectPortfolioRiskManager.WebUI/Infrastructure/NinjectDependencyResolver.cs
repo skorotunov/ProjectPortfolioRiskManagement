@@ -1,4 +1,6 @@
 ﻿using Ninject;
+using ProjectPortfolioRiskManager.Domain.Abstract;
+using ProjectPortfolioRiskManager.Domain.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -27,7 +29,12 @@ namespace ProjectPortfolioRiskManager.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            // bindings here
+            kernel.Bind<ITemplateRepository>().To<TemplateRepository>();
+            kernel.Bind<ICompanySizeRepository>().To<CompanySizeRepository>();
+            kernel.Bind<IPositionRepository>().To<PositionRepository>();
+            kernel.Bind<ISectionRepository>().To<SectionRepository>();
+            kernel.Bind<IQuestionRepository>().To<QuestionRepository>();
+            kernel.Bind<ILikertItemRepository>().To<LikertItemRepository>();
         }
     }
 }

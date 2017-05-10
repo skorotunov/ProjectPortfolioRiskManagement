@@ -1,18 +1,92 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model QuestionnaireViewModel
+@{ ViewBag.Title = "Index";}
+
+@Html.ValidationSummary(true)
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <p>Questionnaire<br />Likert scale will be used for assessment: Strongly agree &rarr; Strongly Disagree</p>
+            <div>
+                Size of company:
+                <div class="companySize-block"></div>
+            </div>
+            <br />
+            <div>
+                Role/position:
+                <div class="position-block"></div>
+            </div>
+            <br />
+            <div class="row control-group">
+                <div class="form-group col-xs-4 floating-label-form-group controls">
+                    <label>Industry</label>
+                    <input type="text" class="form-control" placeholder="Industry" />
+                </div>
+            </div>
+            <br />
+            <div>
+                Dynamic capabilities:
+                <table class="table table-bordered dynamicCapabilities-block"></table>
+            </div>
+            <div>
+                Portfolio risk management:
+                <table class="table table-bordered portfolioRiskManagement-block"></table>
+            </div>
+            <br />
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
-<div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <p>Questionnaire</p>
-        <p>Likert scale will be used for assessment: Strongly agree &rarr; Strongly Disagree </p>
-        <p>Size of company:</p>
-        <ul>
-            <li>micro (fewer than 10 employees and an annual turnover (the amount of money taken in a particular period) or balance sheet (a statement of a company's assets and liabilities) below €2 million.)</li>
-            <li>small (fewer than 50 employees and an annual turnover or balance sheet below €10 million)</li>
-            <li>medium-sized enterprise (fewer than 250 employees and annual turnover below €50 million or balance sheet below €43 million)</li>
-            <li>large enterprise</li>
-        </ul>
-        <br />
-    </div>
-</div>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("CompanySizePartial", "Expert")',
+            type: "GET",
+            dataType: "html",
+            data: { templateId: @Model.TemplateId },
+            success: function (html) {
+                var control = $(".companySize-block");
+                control.html(html);
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("PositionPartial", "Expert")',
+            type: "GET",
+            dataType: "html",
+            data: { templateId: @Model.TemplateId },
+            success: function (html) {
+                var control = $(".position-block");
+                control.html(html);
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("DynamicCapabilitiesPartial", "Expert")',
+            type: "GET",
+            dataType: "html",
+            data: { templateId: @Model.TemplateId },
+            success: function (html) {
+                var control = $(".dynamicCapabilities-block");
+                control.html(html);
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("PortfolioRiskManagementPartial", "Expert")',
+            type: "GET",
+            dataType: "html",
+            data: { templateId: @Model.TemplateId },
+            success: function (html) {
+                var control = $(".portfolioRiskManagement-block");
+                control.html(html);
+            }
+        });
+    });
+</script>

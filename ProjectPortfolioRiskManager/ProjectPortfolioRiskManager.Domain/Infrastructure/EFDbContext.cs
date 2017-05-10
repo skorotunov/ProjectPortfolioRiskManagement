@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
-using ProjectPortfolioRiskManager.Domain.Concrete;
+using ProjectPortfolioRiskManager.Domain.Entities;
 using ProjectPortfolioRiskManager.Domain.Migrations;
 using System.Data.Entity;
 

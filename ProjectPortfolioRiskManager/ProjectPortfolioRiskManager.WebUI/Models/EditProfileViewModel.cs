@@ -1,4 +1,4 @@
-﻿using ProjectPortfolioRiskManager.Domain.Concrete;
+﻿using ProjectPortfolioRiskManager.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProjectPortfolioRiskManager.WebUI.Models

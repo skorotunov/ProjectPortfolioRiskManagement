@@ -1,4 +1,4 @@
-﻿using ProjectPortfolioRiskManager.Domain.Concrete;
+﻿using ProjectPortfolioRiskManager.Domain.Entities;
 
 namespace ProjectPortfolioRiskManager.WebUI.Models
 {

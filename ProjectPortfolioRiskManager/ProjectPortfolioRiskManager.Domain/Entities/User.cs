@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System.Collections.Generic;
 
-namespace ProjectPortfolioRiskManager.Domain.Concrete
+namespace ProjectPortfolioRiskManager.Domain.Entities
 {
     public class User : IdentityUser
     {

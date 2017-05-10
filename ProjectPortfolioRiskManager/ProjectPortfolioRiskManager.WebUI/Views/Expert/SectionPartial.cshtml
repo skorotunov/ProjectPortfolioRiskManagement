@@ -1,0 +1,28 @@
+﻿@model SectionViewModel
+
+@foreach (var item in Model.Sections)
+{
+    <tr>
+        <td>@item.Name</td>
+    </tr>
+    <tr>
+        <td>
+            <ol>
+                @foreach (var question in Model.Questions.Where(x => x.SectionId == item.Id))
+                {
+                    <li>
+                        @question.Value<br />
+                        <div class="btn-group" data-toggle="buttons">
+                            @foreach (var likertItem in Model.LikertItems)
+                            {
+                                <label class="btn btn-default">
+                                    <input type="radio" name="likertItems" value="@likertItem.Id" /> @likertItem.Value
+                                </label>
+                            }
+                        </div>
+                    </li>
+                }
+            </ol>
+        </td>
+    </tr>
+}

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectPortfolioRiskManager.Domain.Concrete
+namespace ProjectPortfolioRiskManager.Domain.Entities
 {
     public class Answer
     {

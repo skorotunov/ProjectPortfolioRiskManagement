@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
-using ProjectPortfolioRiskManager.Domain.Concrete;
+using ProjectPortfolioRiskManager.Domain.Entities;
 using ProjectPortfolioRiskManager.Domain.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;

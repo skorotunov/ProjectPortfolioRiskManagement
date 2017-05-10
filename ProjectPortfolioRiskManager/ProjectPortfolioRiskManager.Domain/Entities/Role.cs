@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace ProjectPortfolioRiskManager.Domain.Concrete
+namespace ProjectPortfolioRiskManager.Domain.Entities
 {
     public class Role : IdentityRole
     {

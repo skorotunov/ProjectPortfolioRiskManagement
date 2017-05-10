@@ -5,3 +5,17 @@
 .validation-summary-errors {
     color: #a94442;
 }
+
+.companySize-block, .position-block {
+    margin-left: 20px;
+}
+
+.table-bordered td {
+    border-style: solid;
+    border-width: medium;
+}
+
+.btn-group {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
