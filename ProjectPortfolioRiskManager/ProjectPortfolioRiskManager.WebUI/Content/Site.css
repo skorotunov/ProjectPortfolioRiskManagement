@@ -13,9 +13,14 @@
 .table-bordered td {
     border-style: solid;
     border-width: medium;
+    padding: 4px;
 }
 
 .btn-group {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.table-bordered ol li {
+    padding-bottom: 15px;
 }

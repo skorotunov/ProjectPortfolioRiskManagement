@@ -9,6 +9,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
     [Authorize(Roles = "Expert, Administrator")]
     public class ExpertController : Controller
     {
+        private readonly IQuestionnaireRepository questionnaireRepository;
         private readonly ITemplateRepository templateRepository;
         private readonly ICompanySizeRepository companySizeRepository;
         private readonly IPositionRepository positionRepository;
@@ -16,9 +17,10 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         private readonly IQuestionRepository questionRepository;
         private readonly ILikertItemRepository likertItemRepository;
 
-        public ExpertController(ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository, IPositionRepository positionRepository,
-            ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository)
+        public ExpertController(IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository, 
+            IPositionRepository positionRepository, ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository)
         {
+            this.questionnaireRepository = questionnaireRepository;
             this.templateRepository = templateRepository;
             this.companySizeRepository = companySizeRepository;
             this.positionRepository = positionRepository;
@@ -30,8 +32,14 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var template = templateRepository.Get();
-            var model = new QuestionnaireViewModel(template);
+            var userName = User.Identity.Name;
+            var model = new QuestionnaireViewModel(userName, questionnaireRepository, templateRepository, companySizeRepository);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Index(QuestionnaireViewModel model)
+        {            
             return View(model);
         }
 

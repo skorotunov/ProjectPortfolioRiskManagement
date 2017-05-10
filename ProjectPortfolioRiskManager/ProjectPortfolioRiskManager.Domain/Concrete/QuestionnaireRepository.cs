@@ -1,17 +1,18 @@
 ﻿using ProjectPortfolioRiskManager.Domain.Abstract;
 using ProjectPortfolioRiskManager.Domain.Entities;
 using ProjectPortfolioRiskManager.Domain.Infrastructure;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ProjectPortfolioRiskManager.Domain.Concrete
 {
-    public class TemplateRepository : ITemplateRepository
+    public class QuestionnaireRepository : IQuestionnaireRepository
     {
         private EFDbContext context = new EFDbContext();
 
-        public Template GetCurrentTemplate()
+        public IEnumerable<Questionnaire> GetByUser(string userName)
         {
-            return context.Templates.OrderByDescending(x => x.Id).First();
+            return context.Questionnaires.Where(x => x.UserId.Equals(userName));
         }
     }
 }

@@ -122,12 +122,14 @@
     <Compile Include="Abstract\ISectionRepository.cs" />
     <Compile Include="Abstract\IPositionRepository.cs" />
     <Compile Include="Abstract\ICompanySizeRepository.cs" />
+    <Compile Include="Abstract\IQuestionnaireRepository.cs" />
     <Compile Include="Abstract\ITemplateRepository.cs" />
     <Compile Include="Concrete\LikertItemRepository.cs" />
     <Compile Include="Concrete\QuestionRepository.cs" />
     <Compile Include="Concrete\PositionRepository.cs" />
     <Compile Include="Concrete\CompanySizeRepository.cs" />
     <Compile Include="Concrete\SectionRepository.cs" />
+    <Compile Include="Concrete\QuestionnaireRepository.cs" />
     <Compile Include="Concrete\TemplateRepository.cs" />
     <Compile Include="Entities\Answer.cs" />
     <Compile Include="Entities\CompanySize.cs" />
@@ -155,6 +157,10 @@
     <Compile Include="Migrations\201705081355230_InsertInitialQuestionnaireData.Designer.cs">
       <DependentUpon>201705081355230_InsertInitialQuestionnaireData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705101230592_InsertInitialTemplateContent.cs" />
+    <Compile Include="Migrations\201705101230592_InsertInitialTemplateContent.Designer.cs">
+      <DependentUpon>201705101230592_InsertInitialTemplateContent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -171,6 +177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705081355230_InsertInitialQuestionnaireData.resx">
       <DependentUpon>201705081355230_InsertInitialQuestionnaireData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705101230592_InsertInitialTemplateContent.resx">
+      <DependentUpon>201705101230592_InsertInitialTemplateContent.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

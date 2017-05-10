@@ -4,6 +4,6 @@ namespace ProjectPortfolioRiskManager.Domain.Abstract
 {
     public interface ITemplateRepository
     {
-        Template Get();
+        Template GetCurrentTemplate();
     }
 }

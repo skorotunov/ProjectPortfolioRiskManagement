@@ -1,4 +1,7 @@
 ﻿@model SectionViewModel
+@{ 
+    int i = 0, j = 0;
+}
 
 @foreach (var item in Model.Sections)
 {
@@ -16,13 +19,16 @@
                             @foreach (var likertItem in Model.LikertItems)
                             {
                                 <label class="btn btn-default">
-                                    <input type="radio" name="likertItems" value="@likertItem.Id" /> @likertItem.Value
+                                    <input type="radio" name="Answers[@(i)][@(j)]" value="@likertItem.Id" /> @likertItem.Value
                                 </label>
                             }
                         </div>
                     </li>
+                    j++;
                 }
             </ol>
         </td>
     </tr>
+    i++;
+    j = 0;
 }

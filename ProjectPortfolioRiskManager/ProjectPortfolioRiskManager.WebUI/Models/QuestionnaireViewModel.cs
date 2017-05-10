@@ -1,4 +1,5 @@
-﻿using ProjectPortfolioRiskManager.Domain.Entities;
+﻿using ProjectPortfolioRiskManager.Domain.Abstract;
+using ProjectPortfolioRiskManager.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,44 +10,44 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
         public int Id { get; set; }
         public int TemplateId { get; set; }
         public string Content { get; set; }
-        public int? CompanySizeId { get; set; }
-        public IEnumerable<string> CompanySizes { get; set; }
-        public int? PositionId { get; set; }
-        public IEnumerable<string> Positions { get; set; }
+        public int CompanySizeId { get; set; }
+        public int PositionId { get; set; }
         public string Industry { get; set; }
-        public IEnumerable<Section> Sections { get; set; }
-        public IEnumerable<LikertItem> LikertItems { get; set; }
         public Dictionary<int, int> Answers { get; set; }
 
         public QuestionnaireViewModel()
         { }
 
-        public QuestionnaireViewModel(Questionnaire questionnaire)
+        public QuestionnaireViewModel(string userName, IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository)
         {
-            Id = questionnaire.Id;
-            Content = questionnaire.Template.Content;
-            CompanySizeId = questionnaire.CompanySizeId;
-            CompanySizes = questionnaire.Template.CompanySizes.Select(x => x.Value);
-            PositionId = questionnaire.PositionId;
-            Positions = questionnaire.Template.Positions.Select(x => x.Value);
-            Industry = questionnaire.Industry;
-            Sections = questionnaire.Template.Sections;
-            LikertItems = questionnaire.Template.LikertItems.OrderBy(x => x.OrderNumber).Select(x => x.LikertItem);
-            Answers = new Dictionary<int, int>();
-            foreach (var answer in questionnaire.Answers)
+            IEnumerable<Questionnaire> questionnaires = questionnaireRepository.GetByUser(userName);
+            Template currentTemplate = templateRepository.GetCurrentTemplate();
+            Questionnaire questionnaire = questionnaires.SingleOrDefault(x => x.TemplateId == currentTemplate.Id);
+            if (questionnaire != null)
             {
-                Answers.Add(answer.QuestionId, answer.LikertItemId);
+                Id = questionnaire.Id;
+                CompanySizeId = questionnaire.CompanySizeId;
+                PositionId = questionnaire.PositionId;
+                Industry = questionnaire.Industry;
             }
+            TemplateId = currentTemplate.Id;
+            Content = currentTemplate.Content;
         }
 
-        public QuestionnaireViewModel(Template template)
+        public QuestionnaireViewModel(Questionnaire questionnaire)
         {
-            TemplateId = template.Id;
-            //Content = template.Content;
-            //CompanySizes = template.CompanySizes.Select(x => x.Value);
-            //Positions = template.Positions.Select(x => x.Value);
-            //Sections = template.Sections;
-            //LikertItems = template.LikertItems.OrderBy(x => x.OrderNumber).Select(x => x.LikertItem);
+
+            Content = questionnaire.Template.Content;
+
+            //
+
+            //Sections = questionnaire.Template.Sections;
+            //LikertItems = questionnaire.Template.LikertItems.OrderBy(x => x.OrderNumber).Select(x => x.LikertItem);
+            //Answers = new Dictionary<int, int>();
+            //foreach (var answer in questionnaire.Answers)
+            //{
+            //    Answers.Add(answer.QuestionId, answer.LikertItemId);
+            //}
         }
     }
 }
