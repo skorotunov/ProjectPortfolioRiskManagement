@@ -1,7 +1,7 @@
 ﻿@model QuestionnaireViewModel
 @{ ViewBag.Title = "Index";}
 
-@Html.ValidationSummary(true)
+@Html.ValidationSummary()
 @using (Html.BeginForm())
 {
     @Html.HiddenFor(x => x.Id)

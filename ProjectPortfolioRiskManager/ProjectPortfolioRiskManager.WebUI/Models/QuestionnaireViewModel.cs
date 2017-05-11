@@ -1,6 +1,7 @@
 ﻿using ProjectPortfolioRiskManager.Domain.Abstract;
 using ProjectPortfolioRiskManager.Domain.Entities;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ProjectPortfolioRiskManager.WebUI.Models
@@ -9,9 +10,13 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
     {
         public int? Id { get; set; }
         public int TemplateId { get; set; }
+        [Required]
         public string Content { get; set; }
+        [Required]
         public int CompanySizeId { get; set; }
+        [Required]
         public int PositionId { get; set; }
+        [Required]
         public string Industry { get; set; }
         public Dictionary<string, int?> Answers { get; set; }
 

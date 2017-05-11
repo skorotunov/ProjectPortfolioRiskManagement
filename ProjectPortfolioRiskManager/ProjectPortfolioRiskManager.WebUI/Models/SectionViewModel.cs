@@ -15,8 +15,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
         public SectionViewModel()
         { }
 
-        public SectionViewModel(int templateId, int? questionnaireId, ISectionRepository sectionRepository, IQuestionRepository questionRepository,
-            ILikertItemRepository likertItemRepository, IAnswerRepository answerRepository, bool initPRMSection = false)
+        public SectionViewModel(int templateId, ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository, bool initPRMSection = false)
         {
             if (initPRMSection)
             {
@@ -28,9 +27,15 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
             }
             Questions = questionRepository.GetByTemplate(templateId);
             LikertItems = likertItemRepository.GetByTemplate(templateId);
+        }
+
+        public SectionViewModel(int templateId, int? questionnaireId, ISectionRepository sectionRepository, IQuestionRepository questionRepository,
+            ILikertItemRepository likertItemRepository, IAnswerRepository answerRepository, bool initPRMSection = false)
+            : this(templateId, sectionRepository, questionRepository, likertItemRepository, initPRMSection)
+        {
             Answers = new Dictionary<string, int>();
             if (questionnaireId.HasValue)
-            {                
+            {
                 IEnumerable<Answer> answers = answerRepository.GetByQuestionnaire(questionnaireId.Value);
                 foreach (var answer in answers)
                 {

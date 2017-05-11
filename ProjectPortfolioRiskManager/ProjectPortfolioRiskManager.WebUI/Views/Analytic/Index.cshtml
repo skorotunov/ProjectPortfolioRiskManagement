@@ -1,47 +1,55 @@
-﻿@model IEnumerable<UserViewModel>
-@{
-    ViewBag.Title = "Users list";
-}
+﻿@model EditTemplateViewModel
+@{ ViewBag.Title = "Analytic area";}
 
-<div class="row">
-    <div class="col-lg-12 col-md-12">
-        <h3>User accounts</h3>
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>&nbsp;</th>
-            </tr>
-            @if (Model.Count() == 0)
-            {
-                <tr>
-                    <td colspan="4" class="text-center">No user accounts are available for editing</td>
-                </tr>
-            }
-            else
-            {
-                foreach (var user in Model)
-                {
-                    <tr>
-                        <td>@user.Id</td>
-                        <td>@user.Name</td>
-                        <td>@user.Email</td>
-                        <td>
-                            @using (Html.BeginForm("DeleteUser", "Analytic", new { id = user.Id }))
-                            {
-                                @Html.ActionLink("Edit", "EditUser", new { id = user.Id }, new { @class = "btn btn-default" })
-                                <button class="btn btn-danger" type="submit">Delete</button>
-                            }
-                        </td>
-                    </tr>
-                }
-            }
-        </table>
+@Html.ValidationSummary()
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.IsInsertNew)
+    <div class="row">
+        <div class="col-lg-10 col-md-10">
+            @Html.TextAreaFor(x => x.Content)
+        </div>
+        <div class="col-lg-2 col-md-2">
+            <button type="button" class="btn btn-primary insertBtn">Insert</button>
+            <br />
+            <br />
+            <button type="submit" class="btn btn-primary updateBtn">Update</button>
+            <br />
+            <br />
+            @Html.ActionLink("View previous", "Previous", null, new { @class = "btn btn-default" })
+        </div>
     </div>
-</div>
-@Html.ActionLink("Create user", "CreateUser", null, new { @class = "btn btn-primary" })
+}
+<br />
+@Html.ActionLink("Manage users", "Users", null, new { @class = "btn btn-default" })
 @if (User.IsInRole("Administrator"))
 {
-    @Html.ActionLink("Manage roles", "Roles", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Manage roles", "Roles", null, new { @class = "btn btn-default", style = "margin-right: 5px;" })
 }
+@Html.ActionLink("Statistics", "Statistics", null, new { @class = "btn btn-default" })
+
+<script>
+    $(document).on("click", ".insertBtn", function () {
+        $("#@Html.IdFor(x => x.IsInsertNew)").val("True");
+        $(this).closest("form").submit();
+    });
+
+    $(document).on("click", ".updateBtn", function () {
+        $("#@Html.IdFor(x => x.IsInsertNew)").val("False");
+        $(this).closest("form").submit();
+    });
+
+    tinyMCE.init(
+    {
+        selector: "textarea",
+        height: 500,
+        plugins: [
+          'advlist autolink lists link image charmap print preview anchor',
+          'searchreplace visualblocks code fullscreen',
+          'insertdatetime media table contextmenu paste code'
+        ],
+        toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        forced_root_block: false
+    });
+</script>

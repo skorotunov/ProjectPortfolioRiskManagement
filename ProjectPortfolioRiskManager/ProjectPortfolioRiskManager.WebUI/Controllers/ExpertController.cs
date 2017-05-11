@@ -48,9 +48,12 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         [HttpPost]
         public async Task<ActionResult> Index(QuestionnaireViewModel model)
         {
-            User user = await userManager.FindByNameAsync(User.Identity.Name);
-            var userId = user.Id;
-            model.Content = model.Submit(model.TemplateId, model.CompanySizeId, model.PositionId, model.Industry, model.Answers, userId, model.Id, questionnaireRepository);
+            if (ModelState.IsValid)
+            {
+                User user = await userManager.FindByNameAsync(User.Identity.Name);
+                var userId = user.Id;
+                model.Content = model.Submit(model.TemplateId, model.CompanySizeId, model.PositionId, model.Industry, model.Answers, userId, model.Id, questionnaireRepository);
+            }
             return View(model);
         }
 
