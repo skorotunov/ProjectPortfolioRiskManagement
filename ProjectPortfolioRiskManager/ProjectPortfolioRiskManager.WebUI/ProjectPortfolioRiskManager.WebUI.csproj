@@ -206,7 +206,7 @@
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\CreateUserViewModel.cs" />
-    <Compile Include="Models\DynamicCapabilitiesViewModel.cs" />
+    <Compile Include="Models\SectionViewModel.cs" />
     <Compile Include="Models\EditProfileViewModel.cs" />
     <Compile Include="Models\EditRoleViewModel.cs" />
     <Compile Include="Models\EditUserViewModel.cs" />

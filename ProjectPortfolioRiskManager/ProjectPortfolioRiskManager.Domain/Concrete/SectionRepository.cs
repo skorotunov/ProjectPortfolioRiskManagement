@@ -12,7 +12,7 @@ namespace ProjectPortfolioRiskManager.Domain.Concrete
 
         public IEnumerable<Section> GetByTemplate(int templateId)
         {
-            return context.Templates.Single(x => x.Id == templateId).Sections;
+            return context.Templates.Single(x => x.Id == templateId).Sections.OrderBy(x => x.Id);
         }
     }
 }

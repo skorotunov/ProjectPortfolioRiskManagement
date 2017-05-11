@@ -7,20 +7,21 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
 {
     public class QuestionnaireViewModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int TemplateId { get; set; }
         public string Content { get; set; }
         public int CompanySizeId { get; set; }
         public int PositionId { get; set; }
         public string Industry { get; set; }
-        public Dictionary<int, int> Answers { get; set; }
+        public Dictionary<string, int?> Answers { get; set; }
 
         public QuestionnaireViewModel()
         { }
 
-        public QuestionnaireViewModel(string userName, IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository)
+        public QuestionnaireViewModel(string userId, IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository,
+            IQuestionRepository questionRepository)
         {
-            IEnumerable<Questionnaire> questionnaires = questionnaireRepository.GetByUser(userName);
+            IEnumerable<Questionnaire> questionnaires = questionnaireRepository.GetByUser(userId);
             Template currentTemplate = templateRepository.GetCurrentTemplate();
             Questionnaire questionnaire = questionnaires.SingleOrDefault(x => x.TemplateId == currentTemplate.Id);
             if (questionnaire != null)
@@ -29,25 +30,20 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
                 CompanySizeId = questionnaire.CompanySizeId;
                 PositionId = questionnaire.PositionId;
                 Industry = questionnaire.Industry;
+                List<Question> questions = questionRepository.GetByTemplate(currentTemplate.Id).ToList();
+                Answers = new Dictionary<string, int?>();
+                for (int i = 0; i < questions.Count(); i++)
+                {
+                    Answers.Add(i.ToString(), questions[i].Answers.SingleOrDefault(x => x.QuestionnaireId == Id)?.LikertItemId);
+                }
             }
             TemplateId = currentTemplate.Id;
             Content = currentTemplate.Content;
         }
 
-        public QuestionnaireViewModel(Questionnaire questionnaire)
+        public void Submit(int templateId, int companySizeId, int positionId, string industry, Dictionary<string, int?> answers, string userId, int? id, IQuestionnaireRepository questionnaireRepository)
         {
-
-            Content = questionnaire.Template.Content;
-
-            //
-
-            //Sections = questionnaire.Template.Sections;
-            //LikertItems = questionnaire.Template.LikertItems.OrderBy(x => x.OrderNumber).Select(x => x.LikertItem);
-            //Answers = new Dictionary<int, int>();
-            //foreach (var answer in questionnaire.Answers)
-            //{
-            //    Answers.Add(answer.QuestionId, answer.LikertItemId);
-            //}
+            questionnaireRepository.Save(templateId, companySizeId, positionId, industry, answers, userId, id);
         }
     }
 }

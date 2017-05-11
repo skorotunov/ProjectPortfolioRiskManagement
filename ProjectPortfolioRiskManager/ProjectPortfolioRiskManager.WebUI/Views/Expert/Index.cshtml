@@ -26,7 +26,7 @@
             url: '@Url.Action("CompanySizePartial", "Expert")',
             type: "GET",
             dataType: "html",
-            data: { templateId: @Model.TemplateId },
+            data: { templateId: @Model.TemplateId, companySizeId: @Model.CompanySizeId },
             success: function (html) {
                 var control = $(".companySize-block");
                 control.html(html);
@@ -48,7 +48,7 @@
             url: '@Url.Action("DynamicCapabilitiesPartial", "Expert")',
             type: "GET",
             dataType: "html",
-            data: { templateId: @Model.TemplateId },
+            data: { templateId: @Model.TemplateId, answers: @Model.Answers },
             success: function (html) {
                 var control = $(".dynamicCapabilities-block");
                 control.html(html);

@@ -1,7 +1,11 @@
-﻿using ProjectPortfolioRiskManager.Domain.Abstract;
+﻿using Microsoft.AspNet.Identity.Owin;
+using ProjectPortfolioRiskManager.Domain.Abstract;
 using ProjectPortfolioRiskManager.Domain.Entities;
+using ProjectPortfolioRiskManager.Domain.Infrastructure;
 using ProjectPortfolioRiskManager.WebUI.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace ProjectPortfolioRiskManager.WebUI.Controllers
@@ -17,7 +21,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         private readonly IQuestionRepository questionRepository;
         private readonly ILikertItemRepository likertItemRepository;
 
-        public ExpertController(IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository, 
+        public ExpertController(IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository,
             IPositionRepository positionRepository, ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -30,22 +34,27 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var userName = User.Identity.Name;
-            var model = new QuestionnaireViewModel(userName, questionnaireRepository, templateRepository, companySizeRepository);
+            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            var userId = user.Id;
+            var model = new QuestionnaireViewModel(userId, questionnaireRepository, templateRepository, companySizeRepository, questionRepository);
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Index(QuestionnaireViewModel model)
-        {            
+        public async Task<ActionResult> Index(QuestionnaireViewModel model)
+        {
+            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            var userId = user.Id;
+            model.Submit(model.TemplateId, model.CompanySizeId, model.PositionId, model.Industry, model.Answers, userId, model.Id, questionnaireRepository);
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult CompanySizePartial(int templateId)
+        public ActionResult CompanySizePartial(int templateId, int companySizeId)
         {
+            ViewBag.CompanySizeId = companySizeId;
             IEnumerable<CompanySize> model = companySizeRepository.GetByTemplate(templateId);
             return PartialView(model);
         }
@@ -58,8 +67,10 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult DynamicCapabilitiesPartial(int templateId)
+        public ActionResult DynamicCapabilitiesPartial(int templateId, Dictionary<string, int> answers)
         {
+            //get selected data here
+            ViewBag.Answers = answers;
             var model = new SectionViewModel(templateId, sectionRepository, questionRepository, likertItemRepository);
             return PartialView("SectionPartial", model);
         }
@@ -69,6 +80,11 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         {
             var model = new SectionViewModel(templateId, sectionRepository, questionRepository, likertItemRepository, true);
             return PartialView("SectionPartial", model);
+        }
+
+        private EFUserManager userManager
+        {
+            get { return HttpContext.GetOwinContext().GetUserManager<EFUserManager>(); }
         }
     }
 }

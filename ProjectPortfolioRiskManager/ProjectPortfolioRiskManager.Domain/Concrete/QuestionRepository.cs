@@ -12,8 +12,8 @@ namespace ProjectPortfolioRiskManager.Domain.Concrete
 
         public IEnumerable<Question> GetByTemplate(int templateId)
         {
-            var sectionIDs = context.Templates.Single(x => x.Id == templateId).Sections.Select(y => y.Id);
-            return context.Questions.Where(x => sectionIDs.Contains(x.SectionId));
+            var sectionIDs = context.Templates.Single(x => x.Id == templateId).Sections.Select(x => x.Id);
+            return context.Questions.Where(x => sectionIDs.Contains(x.SectionId)).OrderBy(x => x.SectionId).ThenBy(x => x.Id);
         }
     }
 }

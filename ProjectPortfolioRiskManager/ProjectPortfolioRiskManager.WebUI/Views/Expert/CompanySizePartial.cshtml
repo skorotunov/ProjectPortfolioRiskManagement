@@ -2,5 +2,12 @@
 
 @foreach (var item in Model)
 {
-    <input type="radio" name="CompanySizeId" value="@item.Id" /> @item.Value<br />
+    if (item.Id == ViewBag.CompanySizeId)
+    {
+        <input type="radio" name="CompanySizeId" value="@item.Id" checked /> @item.Value<br />
+    }
+    else
+    {
+        <input type="radio" name="CompanySizeId" value="@item.Id" /> @item.Value<br />
+    }
 }
