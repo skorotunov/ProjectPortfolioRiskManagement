@@ -22,11 +22,13 @@
 
 <script>
     $(document).ready(function () {
+        $( "input[name='Industry']" ).val("@Model.Industry");
+
         $.ajax({
             url: '@Url.Action("CompanySizePartial", "Expert")',
             type: "GET",
             dataType: "html",
-            data: { templateId: @Model.TemplateId, companySizeId: @Model.CompanySizeId },
+            data: { templateId: @Model.TemplateId, companySizeId: "@Model.CompanySizeId" },
             success: function (html) {
                 var control = $(".companySize-block");
                 control.html(html);
@@ -37,7 +39,7 @@
             url: '@Url.Action("PositionPartial", "Expert")',
             type: "GET",
             dataType: "html",
-            data: { templateId: @Model.TemplateId },
+            data: { templateId: @Model.TemplateId, positionId: "@Model.PositionId" },
             success: function (html) {
                 var control = $(".position-block");
                 control.html(html);
@@ -48,7 +50,7 @@
             url: '@Url.Action("DynamicCapabilitiesPartial", "Expert")',
             type: "GET",
             dataType: "html",
-            data: { templateId: @Model.TemplateId, answers: @Model.Answers },
+            data: { templateId: @Model.TemplateId, questionnaireId: "@Model.Id" },
             success: function (html) {
                 var control = $(".dynamicCapabilities-block");
                 control.html(html);
@@ -59,7 +61,7 @@
             url: '@Url.Action("PortfolioRiskManagementPartial", "Expert")',
             type: "GET",
             dataType: "html",
-            data: { templateId: @Model.TemplateId },
+            data: { templateId: @Model.TemplateId, questionnaireId: "@Model.Id" },
             success: function (html) {
                 var control = $(".portfolioRiskManagement-block");
                 control.html(html);

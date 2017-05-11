@@ -30,20 +30,14 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
                 CompanySizeId = questionnaire.CompanySizeId;
                 PositionId = questionnaire.PositionId;
                 Industry = questionnaire.Industry;
-                List<Question> questions = questionRepository.GetByTemplate(currentTemplate.Id).ToList();
-                Answers = new Dictionary<string, int?>();
-                for (int i = 0; i < questions.Count(); i++)
-                {
-                    Answers.Add(i.ToString(), questions[i].Answers.SingleOrDefault(x => x.QuestionnaireId == Id)?.LikertItemId);
-                }
             }
             TemplateId = currentTemplate.Id;
             Content = currentTemplate.Content;
         }
 
-        public void Submit(int templateId, int companySizeId, int positionId, string industry, Dictionary<string, int?> answers, string userId, int? id, IQuestionnaireRepository questionnaireRepository)
+        public string Submit(int templateId, int companySizeId, int positionId, string industry, Dictionary<string, int?> answers, string userId, int? id, IQuestionnaireRepository questionnaireRepository)
         {
-            questionnaireRepository.Save(templateId, companySizeId, positionId, industry, answers, userId, id);
+            return questionnaireRepository.Save(templateId, companySizeId, positionId, industry, answers, userId, id);
         }
     }
 }

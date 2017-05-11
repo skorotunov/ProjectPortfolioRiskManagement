@@ -36,6 +36,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Infrastructure
             kernel.Bind<IQuestionRepository>().To<QuestionRepository>();
             kernel.Bind<ILikertItemRepository>().To<LikertItemRepository>();
             kernel.Bind<IQuestionnaireRepository>().To<QuestionnaireRepository>();
+            kernel.Bind<IAnswerRepository>().To<AnswerRepository>();
         }
     }
 }

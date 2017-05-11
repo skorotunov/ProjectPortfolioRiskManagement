@@ -1,9 +1,4 @@
 ﻿@model SectionViewModel
-@{ 
-    int j = 0;
-    var ff = ;
-}
-@ViewBag.Answers
 
 @foreach (var item in Model.Sections)
 {
@@ -20,13 +15,21 @@
                         <div class="btn-group" data-toggle="buttons">
                             @foreach (var likertItem in Model.LikertItems)
                             {
-                                <label class="btn btn-default">
-                                    <input type="radio" name="Answers[@(j)]" value="@likertItem.Id" /> @likertItem.Value
-                                </label>
+                                if (Model.Answers.ContainsKey(question.Id.ToString()) && Model.Answers[question.Id.ToString()] == likertItem.Id)
+                                {
+                                    <label class="btn btn-default active">
+                                        <input type="radio" name="Answers[@(question.Id)]" value="@likertItem.Id" checked /> @likertItem.Value
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="Answers[@(question.Id)]" value="@likertItem.Id" /> @likertItem.Value
+                                    </label>
+                                }
                             }
                         </div>
                     </li>
-                    j++;
                 }
             </ol>
         </td>

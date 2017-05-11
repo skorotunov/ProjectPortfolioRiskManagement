@@ -10,12 +10,13 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
         public IEnumerable<Section> Sections { get; set; }
         public IEnumerable<Question> Questions { get; set; }
         public IEnumerable<LikertItem> LikertItems { get; set; }
+        public Dictionary<string, int> Answers { get; set; }
 
         public SectionViewModel()
         { }
 
-        public SectionViewModel(int templateId, ISectionRepository sectionRepository, IQuestionRepository questionRepository,
-            ILikertItemRepository likertItemRepository, bool initPRMSection = false)
+        public SectionViewModel(int templateId, int? questionnaireId, ISectionRepository sectionRepository, IQuestionRepository questionRepository,
+            ILikertItemRepository likertItemRepository, IAnswerRepository answerRepository, bool initPRMSection = false)
         {
             if (initPRMSection)
             {
@@ -27,6 +28,18 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
             }
             Questions = questionRepository.GetByTemplate(templateId);
             LikertItems = likertItemRepository.GetByTemplate(templateId);
+            Answers = new Dictionary<string, int>();
+            if (questionnaireId.HasValue)
+            {                
+                IEnumerable<Answer> answers = answerRepository.GetByQuestionnaire(questionnaireId.Value);
+                foreach (var answer in answers)
+                {
+                    if (Sections.Select(x => x.Id).Contains(answer.Question.SectionId))
+                    {
+                        Answers.Add(answer.QuestionId.ToString(), answer.LikertItemId);
+                    }
+                }
+            }
         }
     }
 }

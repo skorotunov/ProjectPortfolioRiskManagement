@@ -20,9 +20,11 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         private readonly ISectionRepository sectionRepository;
         private readonly IQuestionRepository questionRepository;
         private readonly ILikertItemRepository likertItemRepository;
+        private readonly IAnswerRepository answerRepository;
 
         public ExpertController(IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository,
-            IPositionRepository positionRepository, ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository)
+            IPositionRepository positionRepository, ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository,
+            IAnswerRepository answerRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.templateRepository = templateRepository;
@@ -31,6 +33,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
             this.sectionRepository = sectionRepository;
             this.questionRepository = questionRepository;
             this.likertItemRepository = likertItemRepository;
+            this.answerRepository = answerRepository;
         }
 
         [HttpGet]
@@ -47,7 +50,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         {
             User user = await userManager.FindByNameAsync(User.Identity.Name);
             var userId = user.Id;
-            model.Submit(model.TemplateId, model.CompanySizeId, model.PositionId, model.Industry, model.Answers, userId, model.Id, questionnaireRepository);
+            model.Content = model.Submit(model.TemplateId, model.CompanySizeId, model.PositionId, model.Industry, model.Answers, userId, model.Id, questionnaireRepository);
             return View(model);
         }
 
@@ -60,25 +63,24 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult PositionPartial(int templateId)
+        public ActionResult PositionPartial(int templateId, int positionId)
         {
+            ViewBag.PositionId = positionId;
             IEnumerable<Position> model = positionRepository.GetByTemplate(templateId);
             return PartialView(model);
         }
 
         [HttpGet]
-        public ActionResult DynamicCapabilitiesPartial(int templateId, Dictionary<string, int> answers)
+        public ActionResult DynamicCapabilitiesPartial(int templateId, int? questionnaireId)
         {
-            //get selected data here
-            ViewBag.Answers = answers;
-            var model = new SectionViewModel(templateId, sectionRepository, questionRepository, likertItemRepository);
+            var model = new SectionViewModel(templateId, questionnaireId, sectionRepository, questionRepository, likertItemRepository, answerRepository);
             return PartialView("SectionPartial", model);
         }
 
         [HttpGet]
-        public ActionResult PortfolioRiskManagementPartial(int templateId)
+        public ActionResult PortfolioRiskManagementPartial(int templateId, int? questionnaireId)
         {
-            var model = new SectionViewModel(templateId, sectionRepository, questionRepository, likertItemRepository, true);
+            var model = new SectionViewModel(templateId, questionnaireId, sectionRepository, questionRepository, likertItemRepository, answerRepository, true);
             return PartialView("SectionPartial", model);
         }
 

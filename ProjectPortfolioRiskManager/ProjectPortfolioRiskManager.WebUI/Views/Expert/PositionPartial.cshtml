@@ -2,5 +2,12 @@
 
 @foreach (var item in Model)
 {
-    <input type="radio" name="PositionId" value="@item.Id" /> @item.Value<br />
+    if (item.Id == ViewBag.PositionId)
+    {
+        <input type="radio" name="PositionId" value="@item.Id" checked /> @item.Value<br />
+    }
+    else
+    {
+        <input type="radio" name="PositionId" value="@item.Id" /> @item.Value<br />
+    }
 }
