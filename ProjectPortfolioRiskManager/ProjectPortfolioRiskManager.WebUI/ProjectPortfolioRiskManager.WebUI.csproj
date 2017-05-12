@@ -333,6 +333,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BLL\ParsingLogic.cs" />
+    <Compile Include="BLL\QuestionnaireLogic.cs" />
     <Compile Include="BLL\RoleLogic.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnalyticController.cs" />

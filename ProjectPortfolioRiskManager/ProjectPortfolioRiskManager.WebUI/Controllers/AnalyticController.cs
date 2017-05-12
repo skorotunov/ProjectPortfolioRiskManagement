@@ -26,12 +26,6 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         private readonly ISectionRepository sectionRepository;
         private readonly IQuestionRepository questionRepository;
         private readonly ILikertItemRepository likertItemRepository;
-        private const string companySizesTag = @"<div class=""companySize-block"">";
-        private const string positionsTag = @"<div class=""position-block"">";
-        private const string dynamicCapabilitiesTag = @"<table class=""table table-bordered dynamicCapabilities-block"">";
-        private const string portfolioRiskManagementTag = @"<table class=""table table-bordered portfolioRiskManagement-block"">";
-        private const string divEndTag = "</div>";
-        private const string tableEndTag = "</table>";
 
         public AnalyticController(IQuestionnaireRepository questionnaireRepository, ITemplateRepository templateRepository, ICompanySizeRepository companySizeRepository,
             IPositionRepository positionRepository, ISectionRepository sectionRepository, IQuestionRepository questionRepository, ILikertItemRepository likertItemRepository)
@@ -49,7 +43,8 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         public ActionResult Index()
         {
             var model = new EditTemplateViewModel(templateRepository);
-            model.Content = PopulateContent(model.Id, model.Content);
+            model.Content = QuestionnaireLogic.PopulateContent(model.Id, model.Content, RenderRazorViewToString, companySizeRepository,
+                positionRepository, sectionRepository, questionRepository, likertItemRepository);
             return View(model);
         }
 
@@ -321,36 +316,13 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
-        }
-
-        private string PopulateContent(int templateId, string content)
-        {
-            IEnumerable<CompanySize> companySizes = companySizeRepository.GetByTemplate(templateId);
-            string companySizesHtml = RenderRazorViewToString("CompanySizePartial", companySizes);
-            int index = content.IndexOf(companySizesTag) + companySizesTag.Length;
-            var result = content.Insert(index, companySizesHtml);
-
-            IEnumerable<Position> positions = positionRepository.GetByTemplate(templateId);
-            string positionsHtml = RenderRazorViewToString("PositionPartial", positions);
-            index = result.IndexOf(positionsTag) + positionsTag.Length;
-            result = result.Insert(index, positionsHtml);
-
-            var dynamicCapabilities = new SectionViewModel(templateId, sectionRepository, questionRepository, likertItemRepository);
-            string dynamicCapabilitiesHtml = RenderRazorViewToString("SectionPartial", dynamicCapabilities);
-            index = result.IndexOf(dynamicCapabilitiesTag) + dynamicCapabilitiesTag.Length;
-            result = result.Insert(index, dynamicCapabilitiesHtml);
-
-            var portfolioRiskManagement = new SectionViewModel(templateId, sectionRepository, questionRepository, likertItemRepository, true);
-            string portfolioRiskManagementHtml = RenderRazorViewToString("SectionPartial", portfolioRiskManagement);
-            index = result.IndexOf(portfolioRiskManagementTag) + portfolioRiskManagementTag.Length;
-            result = result.Insert(index, portfolioRiskManagementHtml);
-            return result;
-        }
+        }       
 
         private string MinimizeContent(string content)
         {
             int startIndex = content.IndexOf(companySizesTag) + companySizesTag.Length;
             int endIndex = IndexOfNth(content, divEndTag);
+            ParsingLogic.ExtractString(content.Substring(startIndex, endIndex - startIndex), @"<input name=""CompanySizeId"" type=""radio"" />", "<br />");
             var result = content.Remove(startIndex, endIndex - startIndex);
 
             startIndex = result.IndexOf(positionsTag) + positionsTag.Length;
