@@ -40,14 +40,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                         IsPersistent = false
                     }, ident);
 
-                    if (User.IsInRole(eRoles.Expert.ToString()))
-                    {
-                        return RedirectToAction("Index", "Expert");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Analytic");
-                    }
+                    return RedirectToAction("Index");
                 }
             }
             return View(model);
@@ -73,7 +66,16 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                     {
                         addErrorsFromResult(roleSettingResult);
                     }
-                    return RedirectToAction("Index", "Expert");
+                    else
+                    {
+                        ClaimsIdentity ident = await userManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+                        authManager.SignOut();
+                        authManager.SignIn(new AuthenticationProperties
+                        {
+                            IsPersistent = false
+                        }, ident);
+                        return RedirectToAction("Index");
+                    }
                 }
                 else
                 {

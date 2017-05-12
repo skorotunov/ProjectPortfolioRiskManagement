@@ -53,6 +53,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
                 User user = await userManager.FindByNameAsync(User.Identity.Name);
                 var userId = user.Id;
                 model.Content = model.Submit(model.TemplateId, model.CompanySizeId, model.PositionId, model.Industry, model.Answers, userId, model.Id, questionnaireRepository);
+                return RedirectToAction("Index");
             }
             return View(model);
         }

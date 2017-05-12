@@ -10,7 +10,6 @@ namespace ProjectPortfolioRiskManager.WebUI.Models
     {
         public int? Id { get; set; }
         public int TemplateId { get; set; }
-        [Required]
         public string Content { get; set; }
         [Required]
         public int CompanySizeId { get; set; }

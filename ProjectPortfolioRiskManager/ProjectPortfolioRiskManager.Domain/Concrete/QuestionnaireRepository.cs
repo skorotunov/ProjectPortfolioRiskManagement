@@ -53,7 +53,7 @@ namespace ProjectPortfolioRiskManager.Domain.Concrete
                 }
             }
             context.SaveChanges();
-            return questionnaire.Template.Content;
+            return context.Templates.Single(x => x.Id == questionnaire.TemplateId).Content;
         }
     }
 }
