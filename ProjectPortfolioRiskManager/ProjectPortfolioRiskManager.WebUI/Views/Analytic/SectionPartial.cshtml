@@ -3,7 +3,7 @@
 @foreach (var item in Model.Sections)
 {
     <tr>
-        <td>@item.Name</td>
+        <td class="SectionName">@item.Name</td>
     </tr>
     <tr>
         <td>
@@ -16,7 +16,7 @@
                             @foreach (var likertItem in Model.LikertItems)
                             {
                                 <label class="btn btn-default">
-                                    <input type="radio" name="Answers[@(question.Id)]" /> @likertItem.Value
+                                    <input name="Answers[@(question.Id)]" type="radio" /> @likertItem.Value
                                 </label>
                             }
                         </div>

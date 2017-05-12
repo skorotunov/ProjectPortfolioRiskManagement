@@ -5,7 +5,6 @@ using ProjectPortfolioRiskManager.Domain.Entities;
 using ProjectPortfolioRiskManager.Domain.Infrastructure;
 using ProjectPortfolioRiskManager.WebUI.BLL;
 using ProjectPortfolioRiskManager.WebUI.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -42,9 +41,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = new EditTemplateViewModel(templateRepository);
-            model.Content = QuestionnaireLogic.PopulateContent(model.Id, model.Content, RenderRazorViewToString, companySizeRepository,
-                positionRepository, sectionRepository, questionRepository, likertItemRepository);
+            var model = new EditTemplateViewModel(RenderRazorViewToString, templateRepository, companySizeRepository, positionRepository, sectionRepository, questionRepository, likertItemRepository);
             return View(model);
         }
 
@@ -55,8 +52,7 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
             {
                 User user = await userManager.FindByNameAsync(User.Identity.Name);
                 string userId = user.Id;
-                model.Content = MinimizeContent(model.Content);
-                model.Submit(templateRepository, userId);
+                model.Submit(userId, templateRepository, companySizeRepository, positionRepository, sectionRepository, questionRepository, likertItemRepository);
             }
             return View(model);
         }
@@ -310,48 +306,12 @@ namespace ProjectPortfolioRiskManager.WebUI.Controllers
             ViewData.Model = model;
             using (var sw = new StringWriter())
             {
-                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
                 var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
                 viewResult.View.Render(viewContext, sw);
                 viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
                 return sw.GetStringBuilder().ToString();
             }
-        }       
-
-        private string MinimizeContent(string content)
-        {
-            int startIndex = content.IndexOf(companySizesTag) + companySizesTag.Length;
-            int endIndex = IndexOfNth(content, divEndTag);
-            ParsingLogic.ExtractString(content.Substring(startIndex, endIndex - startIndex), @"<input name=""CompanySizeId"" type=""radio"" />", "<br />");
-            var result = content.Remove(startIndex, endIndex - startIndex);
-
-            startIndex = result.IndexOf(positionsTag) + positionsTag.Length;
-            endIndex = IndexOfNth(result, divEndTag, 3);
-            result = result.Remove(startIndex, endIndex - startIndex);
-
-            startIndex = result.IndexOf(dynamicCapabilitiesTag) + dynamicCapabilitiesTag.Length;
-            endIndex = IndexOfNth(result, tableEndTag);
-            result = result.Remove(startIndex, endIndex - startIndex);
-
-            startIndex = result.IndexOf(portfolioRiskManagementTag) + portfolioRiskManagementTag.Length;
-            endIndex = IndexOfNth(result, tableEndTag, 2);
-            result = result.Remove(startIndex, endIndex - startIndex);
-            return result;
-        }
-
-        private int IndexOfNth(string str, string value, int nth = 1)
-        {
-            if (nth <= 0)
-            {
-                throw new ArgumentException("Can not find the zeroth index of substring in string. Must start with 1");
-            }
-            int offset = str.IndexOf(value);
-            for (int i = 1; i < nth; i++)
-            {
-                if (offset == -1) return -1;
-                offset = str.IndexOf(value, offset + 1);
-            }
-            return offset;
         }
     }
 }

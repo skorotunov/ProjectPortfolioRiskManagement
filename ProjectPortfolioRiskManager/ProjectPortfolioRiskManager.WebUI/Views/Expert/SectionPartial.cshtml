@@ -3,7 +3,7 @@
 @foreach (var item in Model.Sections)
 {
     <tr>
-        <td>@item.Name</td>
+        <td class="SectionName">@item.Name</td>
     </tr>
     <tr>
         <td>
@@ -18,13 +18,13 @@
                                 if (Model.Answers.ContainsKey(question.Id.ToString()) && Model.Answers[question.Id.ToString()] == likertItem.Id)
                                 {
                                     <label class="btn btn-default active">
-                                        <input type="radio" name="Answers[@(question.Id)]" value="@likertItem.Id" checked /> @likertItem.Value
+                                        <input name="Answers[@(question.Id)]" value="@likertItem.Id" checked type="radio" /> @likertItem.Value
                                     </label>
                                 }
                                 else
                                 {
                                     <label class="btn btn-default">
-                                        <input type="radio" name="Answers[@(question.Id)]" value="@likertItem.Id" /> @likertItem.Value
+                                        <input name="Answers[@(question.Id)]" value="@likertItem.Id" type="radio" /> @likertItem.Value
                                     </label>
                                 }
                             }
